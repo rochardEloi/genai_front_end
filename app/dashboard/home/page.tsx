@@ -17,7 +17,8 @@ import {
   Flame,
   BarChart3,
   Lightbulb,
-  RefreshCw
+  RefreshCw,
+  Crown
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -449,6 +450,13 @@ export default function DashboardHome() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/pricing"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
+            >
+              <Crown className="w-4 h-4" />
+              Voir les plans
+            </Link>
             <button
               onClick={handleRefresh}
               disabled={isLoadingData}
