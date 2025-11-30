@@ -676,13 +676,13 @@ export default function DashboardHome() {
                 href="/dashboard/chat"
                 color="bg-gradient-to-br from-green-500 to-green-600"
               />
-              <QuickAction
+             {/*  <QuickAction
                 title="Ma progression"
                 description="Analyse tes statistiques"
                 icon={<TrendingUp className="w-6 h-6" />}
                 href="/dashboard/progress"
                 color="bg-gradient-to-br from-orange-500 to-orange-600"
-              />
+              /> */}
             </CardContent>
           </Card>
         </div>

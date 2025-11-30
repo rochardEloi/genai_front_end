@@ -20,6 +20,7 @@ export async function GET(
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
         credentials: 'include',
+        cache: 'no-store',
       }
     );
 

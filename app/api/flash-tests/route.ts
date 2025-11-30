@@ -6,6 +6,8 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const incomingCookieHeader = request.headers.get("cookie");
+    console.log('Cookie header:', incomingCookieHeader ? 'present' : 'missing');
+    
     const response = await fetch(
       'http://92.112.184.87:1111/api/flash-test/my-flash-tests',
       {
@@ -15,8 +17,11 @@ export async function GET(request: NextRequest) {
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
         credentials: 'include',
+        cache: 'no-store',
       }
     );
+    
+    console.log('Backend response status:', response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -30,6 +35,8 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
+
+    console.log(data)
     console.log('API flash-tests response:', JSON.stringify(data).substring(0, 500));
     
     // Le backend peut retourner un array directement ou un objet avec flash_tests
