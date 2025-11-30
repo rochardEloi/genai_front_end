@@ -393,32 +393,55 @@ function ChatPageContent() {
           <ChatHeader onNewChat={handleNewChat} />
         </div>
 
-        {/* Barre d'info matière */}
+        {/* Barre d'info matière - Responsive */}
         <div className="flex-shrink-0 border-b border-slate-200 bg-white/90 backdrop-blur-sm">
-          <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
-                <span className="mr-1 h-2 w-2 rounded-full bg-emerald-500" />
-                Assistant IA Horizon
-              </span>
-              <span className="text-sm text-slate-500">
-                {conversationId ? "Conversation reprise" : "Nouvelle conversation"}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm">
-                <span>{selectedSubjectConfig.emoji}</span>
-                <span className="font-medium">{selectedSubjectConfig.label}</span>
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleBackToHistory}
-                className="gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Retour
-              </Button>
+          <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+            {/* Mobile: Stack vertical */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+              {/* Ligne 1: Bouton retour + Matière (mobile) / Info assistant (desktop) */}
+              <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3">
+                {/* Bouton retour - visible sur mobile en premier */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBackToHistory}
+                  className="sm:hidden h-8 px-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </Button>
+                
+                <span className="inline-flex items-center rounded-full bg-slate-100 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-slate-700">
+                  <span className="mr-1 h-2 w-2 rounded-full bg-emerald-500" />
+                  <span className="hidden xs:inline">Assistant IA </span>Horizon
+                </span>
+                
+                <span className="hidden sm:inline text-sm text-slate-500">
+                  {conversationId ? "Conversation reprise" : "Nouvelle conversation"}
+                </span>
+                
+                {/* Matière - visible sur mobile à droite */}
+                <span className="sm:hidden inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-xs">
+                  <span>{selectedSubjectConfig.emoji}</span>
+                  <span className="font-medium truncate max-w-[80px]">{selectedSubjectConfig.label}</span>
+                </span>
+              </div>
+              
+              {/* Ligne 2 desktop: Matière + Bouton retour */}
+              <div className="hidden sm:flex items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm">
+                  <span>{selectedSubjectConfig.emoji}</span>
+                  <span className="font-medium">{selectedSubjectConfig.label}</span>
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBackToHistory}
+                  className="gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Retour
+                </Button>
+              </div>
             </div>
           </div>
         </div>

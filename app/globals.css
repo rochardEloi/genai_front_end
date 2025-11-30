@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Utility for overflow-wrap */
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Chat message responsive fixes */
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose code {
+  word-break: break-all;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

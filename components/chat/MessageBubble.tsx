@@ -626,7 +626,7 @@ export function MessageBubble({ message, isStreaming = false, isNewMessage = fal
       {/* BULLE DE MESSAGE */}
       <div
         className={cn(
-          "flex flex-col max-w-[85%] md:max-w-[75%] relative",
+          "flex flex-col max-w-[calc(100%-3rem)] sm:max-w-[85%] md:max-w-[75%] relative min-w-0",
           isUser ? "items-end" : "items-start"
         )}
       >
@@ -639,7 +639,7 @@ export function MessageBubble({ message, isStreaming = false, isNewMessage = fal
 
         <div
           className={cn(
-            "rounded-2xl px-5 py-4 shadow-lg transition-all duration-300 backdrop-blur-sm min-w-[200px]",
+            "rounded-2xl px-3 sm:px-5 py-3 sm:py-4 shadow-lg transition-all duration-300 backdrop-blur-sm min-w-0 w-full overflow-hidden",
             isUser
               ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-sm"
               : "bg-gradient-to-br from-white to-gray-50 border border-gray-200/80 text-gray-900 rounded-bl-sm",
@@ -654,13 +654,14 @@ export function MessageBubble({ message, isStreaming = false, isNewMessage = fal
           {/* RENDU MARKDOWN PROFESSIONNEL */}
           {(displayedContent.length > 0 || isUser) && (
             <div className={cn(
-              "prose prose-sm max-w-none",
+              "prose prose-sm max-w-none break-words overflow-wrap-anywhere",
               isUser ? "prose-invert" : "prose-gray",
-              "prose-headings:font-semibold",
-              "prose-a:font-medium",
+              "prose-headings:font-semibold prose-headings:break-words",
+              "prose-a:font-medium prose-a:break-all",
               "prose-strong:font-bold",
-              "prose-code:font-mono",
-              "prose-p:text-gray-800 prose-p:whitespace-pre-wrap" // Correction texte brut
+              "prose-code:font-mono prose-code:break-all prose-code:whitespace-pre-wrap",
+              "prose-p:text-gray-800 prose-p:whitespace-pre-wrap prose-p:break-words",
+              "prose-pre:overflow-x-auto prose-pre:max-w-full"
             )}>
               <ReactMarkdown
                 components={renderers}
