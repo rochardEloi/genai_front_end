@@ -69,7 +69,7 @@ export function Footer() {
         <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">
-              © 2024 Horizon. Tous droits réservés.
+              © 2025 Horizon. Tous droits réservés.
             </p>
             <div className="flex gap-6 text-sm">
               <Link href="#" className="text-gray-500 hover:text-gray-900 transition">
