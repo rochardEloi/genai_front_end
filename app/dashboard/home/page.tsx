@@ -465,9 +465,9 @@ export default function DashboardHome() {
             >
               <RefreshCw className={`w-5 h-5 text-gray-600 ${isLoadingData ? 'animate-spin' : ''}`} />
             </button>
-            <Badge variant="outline" className="text-sm font-medium">
+            {/* <Badge variant="outline" className="text-sm font-medium">
               Terminale {stream}
-            </Badge>
+            </Badge> */}
           </div>
         </div>
       </div>

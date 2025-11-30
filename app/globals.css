@@ -189,3 +189,78 @@
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
+
+/* Styles d'impression pour les examens */
+@media print {
+  /* Masquer les éléments non imprimables */
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  /* Fond blanc pour l'impression */
+  .print\:bg-white {
+    background: white !important;
+  }
+  
+  /* Styles de l'examen */
+  .exam-content {
+    font-size: 12pt;
+    line-height: 1.6;
+    color: black;
+  }
+  
+  .exam-content h1 {
+    font-size: 14pt;
+    margin-bottom: 8pt;
+  }
+  
+  .exam-content h2 {
+    font-size: 13pt;
+    margin-top: 16pt;
+    margin-bottom: 8pt;
+    border-bottom: 1pt solid #333;
+  }
+  
+  .exam-content h3 {
+    font-size: 12pt;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+  }
+  
+  .exam-content p {
+    margin-bottom: 8pt;
+    text-align: justify;
+  }
+  
+  .exam-content ul,
+  .exam-content ol {
+    margin-left: 20pt;
+    margin-bottom: 8pt;
+  }
+  
+  .exam-content li {
+    margin-bottom: 4pt;
+  }
+  
+  .exam-content hr {
+    border: none;
+    border-top: 1pt solid #666;
+    margin: 16pt 0;
+  }
+  
+  /* Éviter les coupures de page au milieu des sections */
+  .exam-content h2,
+  .exam-content h3 {
+    page-break-after: avoid;
+  }
+  
+  .exam-content p,
+  .exam-content li {
+    page-break-inside: avoid;
+  }
+  
+  /* Marges de page */
+  @page {
+    margin: 2cm;
+  }
+}

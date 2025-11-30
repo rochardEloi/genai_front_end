@@ -247,17 +247,20 @@ export default function ExamGeneratorPage() {
       ) : (
         <>
           {/* Examen généré */}
-          <Card>
-            <CardHeader className="border-b">
-              <div className="flex items-center justify-between">
+          <Card className="overflow-hidden">
+            {/* En-tête avec actions */}
+            <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-indigo-50 print:bg-white">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-green-500" />
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  </div>
                   <div>
-                    <CardTitle className="text-lg">{generatedExam.title}</CardTitle>
+                    <CardTitle className="text-lg text-gray-900">{generatedExam.title}</CardTitle>
                     <p className="text-sm text-gray-500">Examen généré avec succès</p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 print:hidden">
                   <Button variant="outline" size="sm" onClick={handlePrint} className="gap-2">
                     <Printer className="w-4 h-4" />
                     Imprimer
@@ -269,19 +272,80 @@ export default function ExamGeneratorPage() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-6">
-              <div className="prose prose-sm max-w-none print:prose-print">
+
+            {/* Contenu de l'examen */}
+            <CardContent className="pt-8 pb-8 px-6 md:px-10 lg:px-16">
+              <div className="exam-content max-w-3xl mx-auto">
                 <ReactMarkdown
                   components={{
-                    h1: ({ children }) => <h1 className="text-xl font-bold text-center mb-4">{children}</h1>,
-                    h2: ({ children }) => <h2 className="text-lg font-bold mt-6 mb-3">{children}</h2>,
-                    h3: ({ children }) => <h3 className="text-base font-semibold mt-4 mb-2">{children}</h3>,
-                    p: ({ children }) => <p className="mb-3 text-gray-800 leading-relaxed">{children}</p>,
-                    strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
-                    ul: ({ children }) => <ul className="list-disc pl-6 mb-4 space-y-1">{children}</ul>,
-                    ol: ({ children }) => <ol className="list-decimal pl-6 mb-4 space-y-1">{children}</ol>,
-                    li: ({ children }) => <li className="text-gray-800">{children}</li>,
-                    hr: () => <hr className="my-6 border-gray-300" />,
+                    // En-têtes du ministère (centré, style officiel)
+                    h1: ({ children }) => (
+                      <h1 className="text-lg md:text-xl font-bold text-center mb-2 text-gray-900 uppercase tracking-wide">
+                        {children}
+                      </h1>
+                    ),
+                    // Sections principales (PREMIÈRE PARTIE, etc.)
+                    h2: ({ children }) => (
+                      <h2 className="text-base md:text-lg font-bold mt-8 mb-4 text-gray-900 border-b-2 border-blue-500 pb-2 inline-block">
+                        {children}
+                      </h2>
+                    ),
+                    // Sous-sections (I., II., etc.)
+                    h3: ({ children }) => (
+                      <h3 className="text-base font-semibold mt-6 mb-3 text-gray-800">
+                        {children}
+                      </h3>
+                    ),
+                    // Paragraphes
+                    p: ({ children }) => (
+                      <p className="mb-4 text-gray-700 leading-relaxed text-justify">
+                        {children}
+                      </p>
+                    ),
+                    // Texte en gras
+                    strong: ({ children }) => (
+                      <strong className="font-bold text-gray-900">{children}</strong>
+                    ),
+                    // Listes à puces
+                    ul: ({ children }) => (
+                      <ul className="list-disc pl-6 mb-4 space-y-2 text-gray-700">
+                        {children}
+                      </ul>
+                    ),
+                    // Listes numérotées
+                    ol: ({ children }) => (
+                      <ol className="list-decimal pl-6 mb-4 space-y-2 text-gray-700">
+                        {children}
+                      </ol>
+                    ),
+                    // Éléments de liste
+                    li: ({ children }) => (
+                      <li className="text-gray-700 leading-relaxed pl-1">
+                        {children}
+                      </li>
+                    ),
+                    // Séparateurs
+                    hr: () => (
+                      <hr className="my-8 border-t-2 border-gray-200" />
+                    ),
+                    // Code inline (pour les formules)
+                    code: ({ children }) => (
+                      <code className="bg-gray-100 px-2 py-0.5 rounded text-sm font-mono text-blue-700">
+                        {children}
+                      </code>
+                    ),
+                    // Blocs de code
+                    pre: ({ children }) => (
+                      <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 overflow-x-auto my-4 text-sm">
+                        {children}
+                      </pre>
+                    ),
+                    // Blockquotes (pour les consignes)
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-amber-400 bg-amber-50 pl-4 py-3 my-4 italic text-gray-700">
+                        {children}
+                      </blockquote>
+                    ),
                   }}
                 >
                   {generatedExam.exam}
@@ -290,12 +354,24 @@ export default function ExamGeneratorPage() {
             </CardContent>
           </Card>
 
-          {/* Actions */}
-          <div className="flex justify-center gap-4">
+          {/* Actions en bas */}
+          <div className="flex justify-center gap-4 print:hidden">
             <Button variant="outline" onClick={handleReset} className="gap-2">
               <RefreshCw className="w-4 h-4" />
               Générer un autre examen
             </Button>
+            <Button onClick={handlePrint} className="gap-2">
+              <Printer className="w-4 h-4" />
+              Imprimer l'examen
+            </Button>
+          </div>
+
+          {/* Conseils */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 print:hidden">
+            <p className="text-sm text-blue-800">
+              <strong>💡 Conseil:</strong> Imprime cet examen et résous-le dans les conditions réelles (3 heures, sans téléphone). 
+              Cela t'aidera à mieux te préparer pour le jour J.
+            </p>
           </div>
         </>
       )}
