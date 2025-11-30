@@ -3,6 +3,7 @@
 import { useProtectedRoute } from "@/hooks/use-protected-route";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -13,7 +14,13 @@ import {
   Shield,
   ArrowLeft,
   LogOut,
-  CheckCircle2
+  CheckCircle2,
+  Pencil,
+  Save,
+  X,
+  Lock,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
@@ -34,6 +41,20 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Edit mode states
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFirstname, setEditFirstname] = useState("");
+  const [editLastname, setEditLastname] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  
+  // Password change states
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   useEffect(() => {
     if (authLoading) return;
@@ -80,6 +101,95 @@ export default function ProfilePage() {
 
   const getStatusLabel = (status: string) => {
     return status === 'enable' ? 'Actif' : 'Inactif';
+  };
+
+  const startEditing = () => {
+    if (profile) {
+      setEditFirstname(profile.firstname);
+      setEditLastname(profile.lastname);
+      setIsEditing(true);
+      setSaveMessage(null);
+    }
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setSaveMessage(null);
+  };
+
+  const saveProfile = async () => {
+    if (!editFirstname.trim() || !editLastname.trim()) {
+      setSaveMessage({ type: 'error', text: 'Les champs ne peuvent pas etre vides' });
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveMessage(null);
+
+    try {
+      const response = await fetch('/api/users/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstname: editFirstname.trim(),
+          lastname: editLastname.trim()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise a jour');
+      }
+
+      const updatedUser = await response.json();
+      setProfile(prev => prev ? { ...prev, firstname: editFirstname.trim(), lastname: editLastname.trim() } : null);
+      setIsEditing(false);
+      setSaveMessage({ type: 'success', text: 'Profil mis a jour avec succes!' });
+      
+      setTimeout(() => setSaveMessage(null), 3000);
+    } catch (err) {
+      setSaveMessage({ type: 'error', text: 'Erreur lors de la mise a jour du profil' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const savePassword = async () => {
+    setPasswordError(null);
+
+    if (newPassword.length < 6) {
+      setPasswordError('Le mot de passe doit contenir au moins 6 caracteres');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Les mots de passe ne correspondent pas');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const response = await fetch('/api/users/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: newPassword })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise a jour');
+      }
+
+      setIsChangingPassword(false);
+      setNewPassword("");
+      setConfirmPassword("");
+      setSaveMessage({ type: 'success', text: 'Mot de passe mis a jour avec succes!' });
+      
+      setTimeout(() => setSaveMessage(null), 3000);
+    } catch (err) {
+      setPasswordError('Erreur lors de la mise a jour du mot de passe');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (authLoading || isLoading) {
@@ -164,28 +274,79 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
+          {/* Message de succes/erreur */}
+          {saveMessage && (
+            <div className={`p-4 rounded-lg ${saveMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {saveMessage.text}
+            </div>
+          )}
+
           {/* Informations detaillees */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-600" />
-                  Informations personnelles
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <User className="w-5 h-5 text-blue-600" />
+                    Informations personnelles
+                  </CardTitle>
+                  {!isEditing && (
+                    <Button variant="ghost" size="sm" onClick={startEditing}>
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <label className="text-sm text-gray-500">Prenom</label>
-                  <p className="font-medium text-gray-900">{profile.firstname}</p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-500">Nom</label>
-                  <p className="font-medium text-gray-900">{profile.lastname}</p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-500">Email</label>
-                  <p className="font-medium text-gray-900">{profile.email}</p>
-                </div>
+                {isEditing ? (
+                  <>
+                    <div>
+                      <label className="text-sm text-gray-500">Prenom</label>
+                      <Input
+                        value={editFirstname}
+                        onChange={(e) => setEditFirstname(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-500">Nom</label>
+                      <Input
+                        value={editLastname}
+                        onChange={(e) => setEditLastname(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-500">Email</label>
+                      <p className="font-medium text-gray-900">{profile.email}</p>
+                      <p className="text-xs text-gray-400">L'email ne peut pas etre modifie</p>
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <Button onClick={saveProfile} disabled={isSaving} className="gap-2">
+                        <Save className="w-4 h-4" />
+                        {isSaving ? 'Enregistrement...' : 'Enregistrer'}
+                      </Button>
+                      <Button variant="outline" onClick={cancelEditing} disabled={isSaving}>
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="text-sm text-gray-500">Prenom</label>
+                      <p className="font-medium text-gray-900">{profile.firstname}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-500">Nom</label>
+                      <p className="font-medium text-gray-900">{profile.lastname}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-500">Email</label>
+                      <p className="font-medium text-gray-900">{profile.email}</p>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -205,13 +366,85 @@ export default function ProfilePage() {
                   <label className="text-sm text-gray-500">Statut</label>
                   <p className="font-medium text-gray-900">{getStatusLabel(profile.status)}</p>
                 </div>
-                <div>
-                  <label className="text-sm text-gray-500">ID Utilisateur</label>
-                  <p className="font-mono text-xs text-gray-500 break-all">{profile._id}</p>
-                </div>
               </CardContent>
             </Card>
           </div>
+
+          {/* Changer le mot de passe */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Lock className="w-5 h-5 text-blue-600" />
+                  Mot de passe
+                </CardTitle>
+                {!isChangingPassword && (
+                  <Button variant="outline" size="sm" onClick={() => setIsChangingPassword(true)}>
+                    Modifier
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {isChangingPassword ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm text-gray-500">Nouveau mot de passe</label>
+                    <div className="relative mt-1">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Minimum 6 caracteres"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-500">Confirmer le mot de passe</label>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Retapez le mot de passe"
+                      className="mt-1"
+                    />
+                  </div>
+                  {passwordError && (
+                    <p className="text-sm text-red-600">{passwordError}</p>
+                  )}
+                  <div className="flex gap-2">
+                    <Button onClick={savePassword} disabled={isSaving} className="gap-2">
+                      <Save className="w-4 h-4" />
+                      {isSaving ? 'Enregistrement...' : 'Enregistrer'}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setIsChangingPassword(false);
+                        setNewPassword("");
+                        setConfirmPassword("");
+                        setPasswordError(null);
+                      }} 
+                      disabled={isSaving}
+                    >
+                      Annuler
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  Cliquez sur "Modifier" pour changer votre mot de passe
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Actions */}
           <Card className="border-red-100">

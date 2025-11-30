@@ -22,6 +22,7 @@ import {
   Search,
   Clock,
   ArrowRight,
+  ArrowLeft,
   Play,
   Sparkles,
   BookOpen,
@@ -77,6 +78,8 @@ interface ChatHistory {
   subject: string;
   preview: string;
   selected_book_id: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 type SubjectKey = string;
@@ -198,7 +201,13 @@ function ChatPageContent() {
         const response = await fetch('/api/history');
         if (response.ok) {
           const data = await response.json();
-          setChatHistory(data);
+          // Trier par date décroissante (plus récent en premier)
+          const sortedData = Array.isArray(data) 
+            ? data.sort((a: ChatHistory, b: ChatHistory) => 
+                new Date(b.created_at || b.date).getTime() - new Date(a.created_at || a.date).getTime()
+              )
+            : data;
+          setChatHistory(sortedData);
         }
       } catch (error) {
         console.error('Erreur chargement historique:', error);
@@ -343,7 +352,13 @@ function ChatPageContent() {
       const response = await fetch('/api/history');
       if (response.ok) {
         const data = await response.json();
-        setChatHistory(data);
+        // Trier par date décroissante (plus récent en premier)
+        const sortedData = Array.isArray(data) 
+          ? data.sort((a: ChatHistory, b: ChatHistory) => 
+              new Date(b.created_at || b.date).getTime() - new Date(a.created_at || a.date).getTime()
+            )
+          : data;
+        setChatHistory(sortedData);
       }
     } catch (error) {
       console.error('Erreur refresh:', error);
@@ -387,13 +402,15 @@ function ChatPageContent() {
                 <span>{selectedSubjectConfig.emoji}</span>
                 <span className="font-medium">{selectedSubjectConfig.label}</span>
               </span>
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleBackToHistory}
-                className="text-sm underline underline-offset-2 text-slate-500 hover:text-slate-700 transition-colors"
+                className="gap-2"
               >
+                <ArrowLeft className="w-4 h-4" />
                 Retour
-              </button>
+              </Button>
             </div>
           </div>
         </div>
