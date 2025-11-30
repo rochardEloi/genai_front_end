@@ -607,13 +607,13 @@ function ChatPageContent() {
                       </div>
                       <p className="text-slate-600 text-sm mb-3 line-clamp-2">{chat.preview}</p>
                       <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-3 text-xs text-slate-500">
+                       {/*  <div className="flex items-center gap-3 text-xs text-slate-500">
                           <span>{chat.date}</span>
                           <span>•</span>
                           <span>{chat.duration}</span>
                           <span>•</span>
                           <span>{chat.messageCount} messages</span>
-                        </div>
+                        </div> */}
                         <div className="flex gap-2">
                           <Button
                             variant="outline"

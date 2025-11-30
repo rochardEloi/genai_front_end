@@ -28,20 +28,20 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: 'Accueil',
+    label: 'Progression',
     href: '/dashboard/home',
-    icon: Home,
+    icon: TrendingUp,
   },
   {
     label: 'Assistant IA',
     href: '/dashboard/chat',
     icon: MessageCircle,
   },
-  {
+ /*  {
     label: 'Diagnostic',
     href: '/dashboard/diagnostic',
     icon: ClipboardCheck,
-  },
+  }, */
   /* {
     label: 'Exercices',
     href: '/dashboard/exercises',
@@ -53,16 +53,16 @@ const navItems: NavItem[] = [
     icon: FileQuestionIcon,
   }
   ,
-  {
+ /*  {
     label: 'Explications',
     href: '/dashboard/explanations',
     icon: BookOpen,
-  },
-  {
+  }, */
+  /* {
     label: 'Progression',
     href: '/dashboard/progress',
     icon: TrendingUp,
-  },
+  }, */
 ];
 
 export function MobileNav() {
