@@ -473,13 +473,13 @@ export default function DashboardHome() {
                 <Lightbulb className="w-6 h-6 text-blue-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">Commence ton premier test!</h3>
+                <h3 className="font-semibold text-gray-900 mb-1">Commence ton premier chat!</h3>
                 <p className="text-sm text-gray-600">
-                  Fais un test flash pour voir tes statistiques et suivre ta progression.
+                 Commence a parler avec HORIZONAI pour pouvoir progresser.
                 </p>
               </div>
               <Link
-                href="/dashboard/quiz"
+                href="/dashboard/chat"
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
                 Faire un test
