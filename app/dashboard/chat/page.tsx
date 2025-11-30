@@ -1,7 +1,7 @@
 // app/dashboard/chat/page.tsx - Version avec historique intégré
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useProtectedRoute } from "@/hooks/use-protected-route";
 import { useChat } from "@/hooks/use-chat";
 import { ChatHeader } from "@/components/chat/ChatHeader";
@@ -118,7 +118,7 @@ const generateHint = (subjectName: string): string => {
   return hints[subjectName] || "Cours et exercices personnalisés…";
 };
 
-export default function ChatPage() {
+function ChatPageContent() {
   const { loading: authLoading } = useProtectedRoute();
   const { messages, isLoading, sendMessage, clearChat, loadExistingConversation } = useChat();
   const router = useRouter();
@@ -833,5 +833,17 @@ export default function ChatPage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <LoadingSpinner text="Chargement..." />
+      </div>
+    }>
+      <ChatPageContent />
+    </Suspense>
   );
 }

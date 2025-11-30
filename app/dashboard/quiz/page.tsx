@@ -4,7 +4,7 @@ import { useProtectedRoute } from "@/hooks/use-protected-route";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   ArrowLeft, 
@@ -43,7 +43,7 @@ interface CorrectionResult {
 
 type QuizState = "loading" | "already_done" | "answering" | "submitting" | "results" | "error";
 
-export default function QuizPage() {
+function QuizPageContent() {
   const { loading: authLoading } = useProtectedRoute();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -492,5 +492,17 @@ export default function QuizPage() {
     <div className="flex items-center justify-center min-h-screen">
       <LoadingSpinner text="Chargement..." />
     </div>
+  );
+}
+
+export default function QuizPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner text="Chargement du quiz..." />
+      </div>
+    }>
+      <QuizPageContent />
+    </Suspense>
   );
 }
