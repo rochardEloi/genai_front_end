@@ -255,11 +255,19 @@ function ChatPageContent() {
 
   // Filtrage de l'historique
   const filteredHistory = useMemo(() => {
+    if (!searchTerm && selectedFilter === "all") {
+      return chatHistory;
+    }
+    
     return chatHistory.filter((chat) => {
-      const matchesSearch =
-        chat.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        chat.preview.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter = selectedFilter === "all" || chat.subject === selectedFilter;
+      const title = chat.title || '';
+      const preview = chat.preview || '';
+      const subject = chat.subject || '';
+      
+      const matchesSearch = !searchTerm || 
+        title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        preview.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesFilter = selectedFilter === "all" || subject === selectedFilter;
       return matchesSearch && matchesFilter;
     });
   }, [chatHistory, searchTerm, selectedFilter]);
@@ -576,19 +584,6 @@ function ChatPageContent() {
                 }}
               />
             </div>
-            <select
-              className="px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-              value={selectedFilter}
-              onChange={(e) => {
-                setSelectedFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="all">Toutes les matières</option>
-              {Array.from(new Set(chatHistory.map(c => c.subject))).map((subject) => (
-                <option key={subject} value={subject}>{subject}</option>
-              ))}
-            </select>
             <button
               onClick={refreshHistory}
               disabled={historyLoading}
