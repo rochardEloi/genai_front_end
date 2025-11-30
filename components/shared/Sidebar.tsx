@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
     icon: Dumbbell,
   }, */
   {
-    label: 'List Quiz',
+    label: 'Quizzes',
     href: '/dashboard/listquiz',
     icon: FileQuestionIcon,
   },

@@ -244,6 +244,7 @@ export default function DashboardHome() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   // Fetch des données
   useEffect(() => {
@@ -252,10 +253,11 @@ export default function DashboardHome() {
         setIsLoadingData(true);
         setError(null);
 
-        // Fetch flash tests et subjects en parallèle
-        const [testsResponse, subjectsResponse] = await Promise.all([
+        // Fetch flash tests, subjects et profil en parallèle
+        const [testsResponse, subjectsResponse, profileResponse] = await Promise.all([
           fetch('/api/flash-tests'),
-          fetch('/api/subjects')
+          fetch('/api/subjects'),
+          fetch('/api/users/me')
         ]);
 
         if (!testsResponse.ok) {
@@ -264,6 +266,7 @@ export default function DashboardHome() {
 
         const testsData = await testsResponse.json();
         const subjectsData = await subjectsResponse.json();
+        const profileData = await profileResponse.json();
 
         if (testsData.success && Array.isArray(testsData.tests)) {
           setFlashTests(testsData.tests);
@@ -271,6 +274,10 @@ export default function DashboardHome() {
 
         if (subjectsData.success && Array.isArray(subjectsData.subjects)) {
           setSubjects(subjectsData.subjects);
+        }
+
+        if (profileResponse.ok) {
+          setUserProfile(profileData);
         }
       } catch (err) {
         console.error('Erreur lors du chargement des données:', err);
@@ -432,7 +439,7 @@ export default function DashboardHome() {
     );
   }
 
-  const firstName = user?.first_name || user?.user_metadata?.first_name || 'Étudiant';
+  const firstName = userProfile?.firstname || user?.first_name || user?.user_metadata?.first_name || '';
   const stream = user?.stream || user?.user_metadata?.stream || 'S';
 
   return (
@@ -450,13 +457,6 @@ export default function DashboardHome() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/pricing"
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
-            >
-              <Crown className="w-4 h-4" />
-              Voir les plans
-            </Link>
             <button
               onClick={handleRefresh}
               disabled={isLoadingData}

@@ -22,6 +22,9 @@ export function Navbar() {
           <Link href="#features" className="text-sm text-gray-600 hover:text-gray-900 transition">
             Fonctionnalités
           </Link>
+          <Link href="#pricing" className="text-sm text-gray-600 hover:text-gray-900 transition">
+            Tarifs
+          </Link>
           <Link href="#testimonials" className="text-sm text-gray-600 hover:text-gray-900 transition">
             Témoignages
           </Link>
@@ -53,6 +56,9 @@ export function Navbar() {
         <div className="md:hidden bg-white border-b border-gray-200 p-4 space-y-3">
           <Link href="#features" className="block text-gray-600 hover:text-gray-900">
             Fonctionnalités
+          </Link>
+          <Link href="#pricing" className="block text-gray-600 hover:text-gray-900">
+            Tarifs
           </Link>
           <Link href="#benefits" className="block text-gray-600 hover:text-gray-900">
             Avantages
