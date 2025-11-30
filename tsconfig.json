@@ -1,0 +1,59 @@
+{
+  "compilerOptions": {
+    // Target modern browsers for better performance
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    // JavaScript compatibility
+    "allowJs": true,
+    "skipLibCheck": true,
+
+    // Strict type checking
+    "strict": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Module resolution
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    // JSX configuration
+    "jsx": "preserve",
+
+    // Performance
+    "incremental": true,
+
+    // Next.js plugin for enhanced type checking
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+
+    // Path aliases
+    "paths": {
+      "@/*": ["./*"]
+    },
+
+    // Additional strict checks
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false,
+
+    // Allow importing .json files
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
