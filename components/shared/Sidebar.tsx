@@ -12,7 +12,8 @@ import {
   LogOut,
   GraduationCap,
   FileQuestionIcon,
-  User
+  User,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/utils';
@@ -48,6 +49,11 @@ const navItems: NavItem[] = [
     label: 'Quizzes',
     href: '/dashboard/listquiz',
     icon: FileQuestionIcon,
+  },
+  {
+    label: 'Générateur d\'Examen',
+    href: '/dashboard/exams',
+    icon: FileText,
   },
   {
     label: 'Mon Profil',
