@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { code } = await request.json();
@@ -21,11 +23,10 @@ export async function POST(request: NextRequest) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // On forward le header Cookie seulement s'il existe
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
-        // ici pas besoin de `credentials: "include"` car c'est un appel SERVEUR→SERVEUR
         body: JSON.stringify({ code }),
+        cache: 'no-store',
       }
     );
 

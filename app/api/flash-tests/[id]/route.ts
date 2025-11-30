@@ -1,6 +1,8 @@
 // app/api/flash-tests/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -18,6 +20,7 @@ export async function GET(
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
         credentials: 'include',
+        cache: 'no-store',
       }
     );
 

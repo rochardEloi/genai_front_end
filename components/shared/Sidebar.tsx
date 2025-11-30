@@ -11,7 +11,8 @@ import {
   MessageCircle,
   LogOut,
   GraduationCap,
-  FileQuestionIcon
+  FileQuestionIcon,
+  User
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/utils';
@@ -47,8 +48,12 @@ const navItems: NavItem[] = [
     label: 'List Quiz',
     href: '/dashboard/listquiz',
     icon: FileQuestionIcon,
-  }
-  ,
+  },
+  {
+    label: 'Mon Profil',
+    href: '/dashboard/profile',
+    icon: User,
+  },
  /*  {
     label: 'Explications',
     href: '/dashboard/explanations',

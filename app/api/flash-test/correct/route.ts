@@ -1,6 +1,8 @@
 // app/api/flash-test/correct/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { flash_test_id, user_answers } = await request.json();
@@ -22,6 +24,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({ flash_test_id, user_answers }),
       credentials: 'include',
+      cache: 'no-store',
     });
 
     if (!response.ok) {

@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
         credentials: 'include',
+        cache: 'no-store',
       }
     );
 

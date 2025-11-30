@@ -1,6 +1,8 @@
 // app/api/flash-test/create/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { selected_book_id } = await request.json();
@@ -22,6 +24,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({ selected_book_id }),
       credentials: 'include',
+      cache: 'no-store',
     });
 
     if (!response.ok) {

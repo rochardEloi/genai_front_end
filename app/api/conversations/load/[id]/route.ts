@@ -1,6 +1,8 @@
 // app/api/conversations/load/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -15,7 +17,8 @@ export async function GET(
         'Content-Type': 'application/json',
         ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
       },
-        credentials: 'include',
+      credentials: 'include',
+      cache: 'no-store',
     });
 
     if (!response.ok) {

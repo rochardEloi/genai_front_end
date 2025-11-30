@@ -7,10 +7,7 @@ export function Benefits() {
       title: 'Apprends à ton rythme',
       description: 'Pas de pression. Progresse quand tu veux, où tu veux. Chaque moment compte.'
     },
-    {
-      title: 'Fonctionne hors ligne',
-      description: 'Pas de connexion internet? Aucun problème. Télécharge et apprends même sans réseau.'
-    },
+    
     {
       title: '100% gratuit',
       description: 'Aucun frais caché. Accès complet à toutes les fonctionnalités sans payer un gourde.'

@@ -1,6 +1,8 @@
 // app/api/chat/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
  try {
     const body = await request.json();
@@ -48,6 +50,7 @@ export async function POST(request: NextRequest) {
           ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
         },
         body: JSON.stringify(apiRequestBody),
+        cache: 'no-store',
       }
     );
 

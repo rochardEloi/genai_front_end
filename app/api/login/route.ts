@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 const EXTERNAL_LOGIN_URL =
   "http://92.112.184.87:1111/api/users/login";
 
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
         ...(incomingCookieHeader ? { Cookie: incomingCookieHeader } : {}),
       },
       body: JSON.stringify({ email, password }),
-      // pas de credentials ici : c'est un appel serveur → serveur
+      cache: 'no-store',
     });
 
     const rawText = await externalResponse.text();
