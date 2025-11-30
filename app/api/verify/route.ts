@@ -2,6 +2,41 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
 
+// GET: Vérifier si l'utilisateur est connecté via le cookie de session
+export async function GET(request: NextRequest) {
+  try {
+    const incomingCookieHeader = request.headers.get("cookie");
+
+    if (!incomingCookieHeader) {
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
+
+    // Appeler l'API /api/users/me pour vérifier la session
+    const response = await fetch(
+      "http://92.112.184.87:1111/api/users/me",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: incomingCookieHeader,
+        },
+        credentials: 'include',
+        cache: 'no-store',
+      }
+    );
+
+    if (!response.ok) {
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
+
+    const userData = await response.json();
+    return NextResponse.json({ user: userData }, { status: 200 });
+  } catch (error) {
+    console.error("Erreur vérification session:", error);
+    return NextResponse.json({ user: null }, { status: 200 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { code } = await request.json();

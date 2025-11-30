@@ -19,27 +19,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Option : hydrater depuis cookie / token / /api/me
-    setLoading(false);
-  }, []);
+    const initAuth = async () => {
+      try {
+        // Vérifier si l'utilisateur était connecté précédemment via localStorage
+        const savedUser = localStorage.getItem('user');
+        const token = localStorage.getItem('auth-token');
+        
+        if (savedUser && token) {
+          try {
+            setUser(JSON.parse(savedUser));
+          } catch (error) {
+            console.error('Erreur parsing user data:', error);
+            localStorage.removeItem('user');
+            localStorage.removeItem('auth-token');
+          }
+        }
+        
+        // Vérifier aussi via l'API /api/verify pour valider le cookie de session
+        const response = await fetch('/api/verify', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.user) {
+            setUser(data.user);
+            // Sauvegarder dans localStorage pour les prochains rechargements
+            localStorage.setItem('user', JSON.stringify(data.user));
+          }
+        }
+      } catch (error) {
+        console.error('Erreur vérification auth:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-  // Vérifier si l'utilisateur était connecté précédemment
-  const savedUser = localStorage.getItem('user');
-  const token = localStorage.getItem('auth-token');
-  
-  if (savedUser && token) {
-    try {
-      setUser(JSON.parse(savedUser));
-    } catch (error) {
-      console.error('Erreur parsing user data:', error);
-      localStorage.removeItem('user');
-      localStorage.removeItem('auth-token');
-    }
-  }
-  
-  setLoading(false);
-}, []);
+    initAuth();
+  }, []);
 
   const signOut = async () => {
     setUser(null);
