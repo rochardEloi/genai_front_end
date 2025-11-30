@@ -484,10 +484,10 @@ function ChatPageContent() {
                 Discute avec ton assistant IA et retrouve tes conversations
               </p>
             </div>
-            <Button onClick={handleNewChat} className="gap-2">
+           {/*  <Button onClick={handleNewChat} className="gap-2">
               <Plus className="w-4 h-4" />
               Nouvelle conversation
-            </Button>
+            </Button> */}
           </div>
         </div>
           
